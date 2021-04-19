@@ -4,5 +4,7 @@ using UnityEngine;
 public class GameSaveBehaviour : SerializedMonoBehaviour, IGameSave
 {
     [SerializeField, HideLabel, BoxGroup("Game Save")] IGameSave _gameSave;
-    [SerializeField, HideLabel, BoxGroup("Game Data")] IGameData[] _gameData = new IGameData[0];
+
+    public void Save(string filename) => _gameSave.Save(filename);
+    public void Load(string filename) => _gameSave.Load(filename);
 }
