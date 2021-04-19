@@ -8,5 +8,8 @@
 	"author": {
 		"name": "Fedora Dev",
 		"email": "fedora.game.dev@gmail.com"
+	},
+	"dependencies": {
+		"jillejr.newtonsoft.json-for-unity": "https://github.com/jilleJr/Newtonsoft.Json-for-Unity.git#upm"
 	}
 }
