@@ -8,15 +8,5 @@
 	"author": {
 		"name": "Fedora Dev",
 		"email": "fedora.game.dev@gmail.com"
-	},
-	"scopedRegistries": [
-		{
-			"name": "Packages from jillijr",
-			"url": "https://npm.cloudsmith.io/jillejr/newtonsoft-json-for-unity/",
-			"scopes": ["jillejr"]
-		}
-	],
-	"dependencies": {
-		"jillejr.newtonsoft.json-for-unity": "13.0.102"
 	}
 }
