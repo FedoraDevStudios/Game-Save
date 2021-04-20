@@ -1,11 +1,13 @@
+using Newtonsoft.Json;
 using System;
 using UnityEngine;
 
+[Serializable]
 public class ExampleData : IGameData
 {
-    [SerializeField] int _sampleInt;
-    [SerializeField] float _sampleFloat;
-    [SerializeField] string _sampleString;
+    [SerializeField, JsonProperty] int _sampleInt;
+    [SerializeField, JsonProperty] float _sampleFloat;
+    [SerializeField, JsonProperty] string _sampleString;
 
     public void LoadData(IGameData data)
 	{

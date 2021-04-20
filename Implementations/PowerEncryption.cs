@@ -2,7 +2,6 @@ using Sirenix.OdinInspector;
 using System.Text;
 using UnityEngine;
 
-[InlineProperty]
 public class PowerEncryption : IEncrypt
 {
 	[SerializeField] int _key = 129;
