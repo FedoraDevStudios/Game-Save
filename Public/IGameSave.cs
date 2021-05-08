@@ -1,5 +1,8 @@
-public interface IGameSave
+namespace FedoraDev.GameSave
 {
-    void Save(string filename);
-    void Load(string filename);
+    public interface IGameSave
+    {
+        void Save(string filename);
+        void Load(string filename);
+    }
 }

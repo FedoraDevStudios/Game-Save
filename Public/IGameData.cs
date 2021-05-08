@@ -1,5 +1,8 @@
-public interface IGameData
+namespace FedoraDev.GameSave
 {
-    void LoadData(byte[] data);
-    byte[] SaveData();
+    public interface IGameData
+    {
+        void LoadData(byte[] data);
+        byte[] SaveData();
+    }
 }

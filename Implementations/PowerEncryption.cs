@@ -2,26 +2,29 @@ using Sirenix.OdinInspector;
 using System.Text;
 using UnityEngine;
 
-public class PowerEncryption : IEncrypt
+namespace FedoraDev.GameSave.Implementations
 {
-	[SerializeField] int _key = 129;
-
-	public string Decrypt(string encrypted) => Process(encrypted);
-	public string Encrypt(string humanReadable) => Process(humanReadable);
-
-	string Process(string input)
+	public class PowerEncryption : IEncrypt
 	{
-		StringBuilder inString = new StringBuilder(input);
-		StringBuilder outString = new StringBuilder(input.Length);
-		char c;
+		[SerializeField] int _key = 129;
 
-		for (int i = 0; i < input.Length; i++)
+		public string Decrypt(string encrypted) => Process(encrypted);
+		public string Encrypt(string humanReadable) => Process(humanReadable);
+
+		string Process(string input)
 		{
-			c = inString[i];
-			c = (char)(c ^ _key);
-			outString.Append(c);
-		}
+			StringBuilder inString = new StringBuilder(input);
+			StringBuilder outString = new StringBuilder(input.Length);
+			char c;
 
-		return outString.ToString();
+			for (int i = 0; i < input.Length; i++)
+			{
+				c = inString[i];
+				c = (char)(c ^ _key);
+				outString.Append(c);
+			}
+
+			return outString.ToString();
+		}
 	}
 }

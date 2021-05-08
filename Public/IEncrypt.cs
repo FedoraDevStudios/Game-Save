@@ -1,5 +1,8 @@
-public interface IEncrypt
+namespace FedoraDev.GameSave
 {
-    string Encrypt(string humanReadable);
-    string Decrypt(string encrypted);
+    public interface IEncrypt
+    {
+        string Encrypt(string humanReadable);
+        string Decrypt(string encrypted);
+    }
 }
