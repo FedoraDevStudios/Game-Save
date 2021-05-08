@@ -40,8 +40,6 @@ public class DictionaryGameSave : IGameSave
 
 		if (_encrypt) jsonData = _encryptor.Encrypt(jsonData);
 
-		Debug.Log(jsonData);
-
 		using (StreamWriter writer = new StreamWriter(filePath))
 			writer.Write(jsonData);
 	}
