@@ -25,7 +25,7 @@ This can be added as a dependency to your Unity project manually. You just need 
 {
     "dependencies": {
         ...,
-        "com.fedoradev.developerconsole": "https://github.com/FedoraDevStudios/Game-Save.git#[version]"
+        "com.fedoradev.gamesave": "https://github.com/FedoraDevStudios/Game-Save.git#[version]"
     }
 }
 ```
