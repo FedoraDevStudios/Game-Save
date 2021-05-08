@@ -7,24 +7,19 @@ namespace FedoraDev.GameSave.Examples
 	[Serializable]
 	public class ExampleData : IGameData
 	{
+		[SerializeField] IByteManager _byteManager;
 		[SerializeField] int _sampleInt;
 		[SerializeField] float _sampleFloat;
 		[SerializeField] string _sampleString;
 
-		public void LoadData(IGameData data)
-		{
-			ExampleData eData = data as ExampleData;
-
-			if (eData != null)
-			{
-				_sampleInt = eData._sampleInt;
-				_sampleFloat = eData._sampleFloat;
-				_sampleString = eData._sampleString;
-			}
-		}
-
 		public void LoadData(byte[] data)
 		{
+			_byteManager.SetByteArray(data);
+			_sampleInt = _byteManager.GetInt();
+			_sampleFloat = _byteManager.GetFloat();
+			_sampleString = _byteManager.GetString();
+
+			/*
 			_sampleInt = BitConverter.ToInt32(data, 0);
 			_sampleFloat = BitConverter.ToSingle(data, 4);
 
@@ -37,10 +32,16 @@ namespace FedoraDev.GameSave.Examples
 			}
 
 			_sampleString = string.Join("", sampleStringCharacterBytes);
+			*/
 		}
 
 		public byte[] SaveData()
 		{
+			_byteManager.AddInt(_sampleInt);
+			_byteManager.AddFloat(_sampleFloat);
+			_byteManager.AddString(_sampleString);
+			return _byteManager.GetByteArray();
+			/*
 			byte[] sampleIntBytes = BitConverter.GetBytes(_sampleInt);
 			byte[] sampleFloatBytes = BitConverter.GetBytes(_sampleFloat);
 			List<byte[]> sampleStringBytes = new List<byte[]>();
@@ -69,6 +70,7 @@ namespace FedoraDev.GameSave.Examples
 			}
 
 			return bytes;
+			*/
 		}
 	}
 }
