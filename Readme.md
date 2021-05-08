@@ -41,76 +41,55 @@ For the easiest use, add a `GameSaveBehaviour` component to a game object in the
 As an example, go ahead and create a new object and add the `GameDataBehavour` component to it. You can select the data type from the `Game Data` drop down. For now, just use the `ExampleData` option and add any dummy values you wish to add. Next, in the `GameSaveBehaviour`, add an entry with any text as the key, then drag the `GameDataBehaviour` component into the value slot and hit the `Add` button. Finally, add a `TestingBehaviour` from the Example provided and assign the `GameSaveBehaviour` component to the `Game Save` slot. Hit `Save` and you'll find the save file is created. You can show the file in your file browser by clicking `Show File Location` in the `GameSaveBehaviour` > `File Options` drop down. Finish testing the functionality by changing some values in the data component and then hitting `Load` to see the values return to the saved ones.
 
 ### Explanation
-Game Save is responsible for taking an arbitrary amount of data and storing it to disk. It will manage how and where that data is stored. It is important to note that this does not come for free and will require you to inform the system how the individual pieces of data will be organized. You do this by implementing `IGameData` in your object which will require you to convert the important parts of the object to and from a simplified byte array. You may want to brush up on [BitConverter](https://docs.microsoft.com/en-us/dotnet/api/system.bitconverter?view=net-5.0) as well as the size of each [Value Type](https://www.tutorialsteacher.com/csharp/csharp-data-typeshttps://docs.microsoft.com/en-us/dotnet/api/system.bitconverter?view=net-5.0) in C#.
+Game Save is responsible for taking an arbitrary amount of data and storing it to disk. It will manage how and where that data is stored. You will be responsible for how the data is layed out on a byte-to-byte basis. Luckily, I've also included a Byte Manager to handle all the conversion nonsense for you.
 
 #### IGameSave
 This interface brings all of the others together. It stores a list of `IGameData` that gets run through the `IDataHandler` and optionally through `IEncrypt` before storing the data to a file on disk. You can implement your own version of this interface, however the included one comes with a lot of options.
 
 #### IGameData
-This interface should be implemented to enable an object to be saved to disk. This interface only requires 2 methods to be defined; `SaveData` and `LoadData`. Below are the implementations used in the `ExampleData` object in the included example. It is recommended to implement this in both the data object and the behaviour that contains it, passing the methods down to the relevant object.
+This interface should be implemented to enable an object to be saved to disk. This interface only requires 2 methods to be defined; `SaveData` and `LoadData`. Below are the implementations used in the `ExampleData` object in the included example.
 
-##### SaveData
-Here, we get each individual member and convert it to bytes. Note that `strings` can be any length and requires a bit extra work. After converting, we create a single byte array with just the right length and insert all of the bytes into it.
 ```C#
-public byte[] SaveData()
+[Serializable]
+public class ExampleData : IGameData
 {
-	// Get Bytes from members
-	byte[] sampleIntBytes = BitConverter.GetBytes(_sampleInt);
-	byte[] sampleFloatBytes = BitConverter.GetBytes(_sampleFloat);
-	List<byte[]> sampleStringBytes = new List<byte[]>();
-	for (int i = 0; i < _sampleString.Length; i++)
-		sampleStringBytes.Add(BitConverter.GetBytes(_sampleString[i]));
+	// Set up a byte manager in the inspector
+	[SerializeField] IByteManager _byteManager;
 
-	// Create byte array with _just_ enough space
-	int byteCount = sampleIntBytes.Length;
-	byteCount += sampleFloatBytes.Length;
-	byteCount += sampleStringBytes.Count * 2;
-	byte[] bytes = new byte[byteCount];
+	// These members will be saved to disk
+	[SerializeField] int _sampleInt;
+	[SerializeField] float _sampleFloat;
+	[SerializeField] string _sampleString;
 
-	// Insert bytes into array
-	for (int i = 0; i < sampleIntBytes.Length; i++)
-		bytes[i] = sampleIntBytes[i];
-
-	for (int i = 0; i < sampleFloatBytes.Length; i++)
+	public void LoadData(byte[] data)
 	{
-		int index = i + 4;
-		bytes[index] = sampleFloatBytes[i];
+		// Assign byte data to the byte manager
+		_byteManager.SetByteArray(data);
+
+		// Pull elements from the byte manager in the same order they get saved in
+		_sampleInt = _byteManager.GetInt();
+		_sampleFloat = _byteManager.GetFloat();
+		_sampleString = _byteManager.GetString();
 	}
 
-	for (int i = 0; i < sampleStringBytes.Count; i++)
+	public byte[] SaveData()
 	{
-		int index = (i * 2) + 8;
-		bytes[index] = sampleStringBytes[i][0];
-		bytes[index + 1] = sampleStringBytes[i][1];
-	}
+		// Initialize the byte manager with empty bytes
+		_byteManager.SetByteArray();
 
-	// Return array
-	return bytes;
+		// Add members in whatever order you want the data layout to be in
+		_byteManager.AddInt(_sampleInt);
+		_byteManager.AddFloat(_sampleFloat);
+		_byteManager.AddString(_sampleString);
+
+		// Convert byte manager data to a byte array
+		return _byteManager.GetByteArray();
+	}
 }
 ```
 
-##### LoadData
-When the data is loaded, all we need to do is convert the bytes back into their respective data types and store them back into the object's members.
-Note that the data received should be in the same order that you define in SaveData()
-```C#
-public void LoadData(byte[] data)
-{
-	// Convert back to data types and assign back to object's members.
-	_sampleInt = BitConverter.ToInt32(data, 0);
-	_sampleFloat = BitConverter.ToSingle(data, 4);
-
-	// Strings require a bit extra work. First make a char array, then join back to a string.
-	char[] sampleStringCharacterBytes = new char[(data.Length - 8) / 2];
-
-	for (int i = 0; i < sampleStringCharacterBytes.Length; i++)
-	{
-		int index = (i * 2) + 8;
-		sampleStringCharacterBytes[i] = BitConverter.ToChar(data, index);
-	}
-
-	_sampleString = string.Join("", sampleStringCharacterBytes);
-}
-```
+#### IByteManager
+This defines the storable data types that are available and provides handy methods for creating a byte array.
 
 #### IDataHandler
 This interface allows you to convert the data into a string that can be written to a file. The included implementation converts it to a JSON string, however you can create any type of handler for your data that you need.
