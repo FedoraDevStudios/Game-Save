@@ -31,16 +31,10 @@ public class DictionaryGameSave : IGameSave
 		string filePath = GetFilePath(filename);
 		_ = Directory.CreateDirectory(GetFolderPath());
 
-		Dictionary<string, IGameData> gameData = new Dictionary<string, IGameData>();
+		Dictionary<string, byte[]> gameData = new Dictionary<string, byte[]>();
 
 		foreach (KeyValuePair<string, IGameData> gd in _gameData)
-		{
-			GameDataBehaviour gdb = gd.Value as GameDataBehaviour;
-			if (gdb != null)
-				gameData.Add(gd.Key, gdb.GameData);
-			else
-				gameData.Add(gd.Key, gd.Value);
-		}
+			gameData.Add(gd.Key, gd.Value.SaveData());
 
 		string jsonData = _dataHandler.ConvertToString(gameData);
 
@@ -63,9 +57,9 @@ public class DictionaryGameSave : IGameSave
 
 		if (_encrypt) jsonData = _encryptor.Decrypt(jsonData);
 
-		Dictionary<string, IGameData> gameData = _dataHandler.ConvertToObject<Dictionary<string, IGameData>>(jsonData);
+		Dictionary<string, byte[]> gameData = _dataHandler.ConvertToObject<Dictionary<string, byte[]>>(jsonData);
 
-		foreach (KeyValuePair<string, IGameData> data in gameData)
+		foreach (KeyValuePair<string, byte[]> data in gameData)
 		{
 			if (_gameData.ContainsKey(data.Key))
 				_gameData[data.Key].LoadData(data.Value);

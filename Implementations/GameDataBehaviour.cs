@@ -8,5 +8,6 @@ public class GameDataBehaviour : SerializedMonoBehaviour, IGameData
 
     public IGameData GameData => _gameData;
 
-    public void LoadData(IGameData data) => _gameData.LoadData(data);
+    public void LoadData(byte[] data) => _gameData.LoadData(data);
+    public byte[] SaveData() => _gameData.SaveData();
 }
