@@ -3,35 +3,10 @@
 An extendable save system for Unity.
 
 ## Installation
-This project uses [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041), which I cannot redistribute. If you don't own Odin Inspector, I would highly recommend purchasing it otherwise you won't be able to serialize interface instances as members which completely breaks this solution.
-
-#### Package Manager
-##### Git Extension
-First, do yourself a favor and add the [UPM Git Extension](https://github.com/mob-sakai/UpmGitExtension) package to your project. This package makes git packages many times easier to use in your project. simply add `https://github.com/mob-sakai/UpmGitExtension.git` as a new package via the git option in the package manager. Afterwords, reopen the Package Manager.
+Follow the steps [Here](https://github.com/FedoraDevStudios/Installation-Unity) to add this package to your Unity project using this package's URL.
 
 ##### Json.NET for Unity
-Next, you will need to add [Json.NET for Unity](https://github.com/jilleJr/Newtonsoft.Json-for-Unity). In the top left, you will find a git logo. This button will show a small menu for adding git packages to your project. add `https://github.com/jilleJr/Newtonsoft.Json-for-Unity` in the `Repository URL` box and hit `Find Versions`. Select the latest `upm` version, i.e. `10.0.302 - upm` and then `Install Package`.
-
-##### This Package
-Finally, open the git menu again and add the URL for this repo. Select the version you wish to use and then `Install Package`.
-
-#### UPM Upgrade
-If you added the Git Extension package during installation, then you can change the installed version just like any other package.
-
-#### Manual Installation
-This can be added as a dependency to your Unity project manually. You just need to add a reference to this repo to your project's `Packages/manifest.json` file. Be sure to switch `[version]` with whichever release you would prefer, e.g. `.git#1.0.2`.
-
-```js
-{
-    "dependencies": {
-        ...,
-        "com.fedoradev.gamesave": "https://github.com/FedoraDevStudios/Game-Save.git#[version]"
-    }
-}
-```
-
-#### Manual Upgrade
-After installing manually, you have to change both `Packages/manifest.json` and `Packages/packages-lock.json`. In the former, simply update the dependency with the version you wish to pull. In the lock file, you need to remove the entry for the package. This entry is a few lines long and everything needs to be deleted, including the curly braces. After this is successfully completed, moving back to Unity will force the application to download the desired version.
+Next, you will need to add [Json.NET for Unity](https://github.com/jilleJr/Newtonsoft.Json-for-Unity). Add `https://github.com/jilleJr/Newtonsoft.Json-for-Unity` in the `Repository URL` box and hit `Find Versions`. Select the latest `upm` version, i.e. `10.0.302 - upm` and then `Install Package`.
 
 ## Usage
 ### Add to Scene
